@@ -30,8 +30,13 @@ profile_tab_window.o: profile_tab_window.cpp profile_tab_window.hpp
 #*************MODEL goes here**********************************
 
 
-#*************CONTROLLER goes here*****************************
+#*************View goes here?**********************************
+View.o: chat_message.hpp view.hpp view.cpp
+	${CXX} -c view.cpp view.hpp
 
+#*************CONTROLLER goes here*****************************
+Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
+	${CXX} -c controller.cpp controller.hpp
 
 #*************final exec goes here*****************************
 chat_client: chat_client.o
