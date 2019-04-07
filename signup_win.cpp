@@ -32,6 +32,14 @@ Signup_win::Signup_win(int maxY, int maxX){
 }
 void Signup_win::show()
 {
+	box(signup, 0, 0);
+        box(name_window, 0, 0);
+        box(email_window, 0, 0);
+        box(username_window, 0, 0);
+        box(password_window, 0,0);
+        box(ok_button, 0, 0);
+        box(cancel_button, 0, 0);
+
 	refresh();
 	wrefresh(name_window);
 	wrefresh(email_window);
@@ -120,7 +128,8 @@ void Signup_win::getwinput(WINDOW *win, std::string &str){
 			str.push_back(ch);
                 mvwprintw(win, 1, 1, input_clear.c_str()); //clear input
                 mvwprintw(win, 1, 1, str.c_str());
-                wrefresh(win);
+                show(); //needed to keep boxes in shape
+		wrefresh(win);
         }	
 }
 		
