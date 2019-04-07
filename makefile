@@ -27,7 +27,7 @@ setting_tab_window.o: setting_tab_window.cpp setting_tab_window.hpp
 profile_tab_window.o: profile_tab_window.cpp profile_tab_window.hpp
 	${CXX} -c profile_tab_window.cpp profile_tab_window.hpp
 signup_win.o: signup_win.cpp signup_win.hpp
-	${CXX} -c signup_win.cpp signup_win.hpp
+	${CXX} -c signup_win.cpp signup_win.hpp -lncurses
 
 #*************MODEL goes here**********************************
 

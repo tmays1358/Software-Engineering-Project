@@ -116,13 +116,13 @@ void Signup_win::getwinput(WINDOW *win, std::string &str){
 
                 if((ch == KEY_BACKSPACE || ch == KEY_DC) && str.size() > 0)
 			str.pop_back();
-                        else if(ch != '\n')
-				str.push_back(ch);
-                        mvwprintw(win, 1, 1, input_clear.c_str()); //clear input
-                        mvwprintw(win, 1, 1, str.c_str());
-                        wrefresh(win);
-                }	
-	}
+                else if(ch != '\n')
+			str.push_back(ch);
+                mvwprintw(win, 1, 1, input_clear.c_str()); //clear input
+                mvwprintw(win, 1, 1, str.c_str());
+                wrefresh(win);
+        }	
+}
 		
 void Signup_win::highlight_window(int selected){
 	switch(selected){
