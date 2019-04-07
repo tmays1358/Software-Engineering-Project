@@ -9,7 +9,7 @@ CPPFLAGS=-I/home/`whoami`/asio-1.12.2/include
 all:chat_client chat_server
 
 #test the successful compilation of object files
-object_files: chat_window.o about_tab_window.o help_tab_window.o setting_tab_window.o profile_tab_window.o
+object_files: chat_window.o about_tab_window.o help_tab_window.o setting_tab_window.o profile_tab_window.o signup_win.o
 
 #client and server
 chat_client.o: chat_client.cpp chat_message.hpp
@@ -26,6 +26,8 @@ setting_tab_window.o: setting_tab_window.cpp setting_tab_window.hpp
 	${CXX} -c setting_tab_window.cpp setting_tab_window.hpp
 profile_tab_window.o: profile_tab_window.cpp profile_tab_window.hpp
 	${CXX} -c profile_tab_window.cpp profile_tab_window.hpp
+signup_win.o: signup_win.cpp signup_win.hpp
+	${CXX} -c signup_win.cpp signup_win.hpp
 
 #*************MODEL goes here**********************************
 
