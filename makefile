@@ -34,10 +34,13 @@ signup_win.o: signup_win.cpp signup_win.hpp
 #*************MODEL goes here**********************************
 
 
-#*************View goes here?**********************************
+#*************View goes here bottom stuff**********************
 View.o: chat_message.hpp view.hpp view.cpp
 	${CXX} -c view.cpp view.hpp
-
+user.o: user.hpp user.cpp
+	${CXX} -c user.hpp user.cpp
+message.o: message.hpp user.hpp message.cpp
+	${CXX} -c message.hpp message.cpp
 #*************CONTROLLER goes here*****************************
 Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
 	${CXX} -c controller.cpp controller.hpp
