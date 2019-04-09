@@ -44,6 +44,8 @@ user.o: user.hpp user.cpp
 	${CXX} -c user.hpp user.cpp
 message.o: message.hpp user.hpp message.cpp
 	${CXX} -c message.hpp message.cpp
+room.o: room.hpp room.cpp user.hpp
+	${CXX} -c room.hpp room.cpp
 #*************CONTROLLER goes here*****************************
 Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
 	${CXX} -c controller.cpp controller.hpp
