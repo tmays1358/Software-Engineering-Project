@@ -32,7 +32,10 @@ signup_win.o: signup_win.cpp signup_win.hpp
 	${CXX} -c signup_win.cpp signup_win.hpp -lncurses
 
 #*************MODEL goes here**********************************
-
+server.o:signup_win.h login_win.h server.h server.cpp
+	${CXX} -c server.cpp server.h
+client.o: rooms.h client.h client.cpp
+	${CXX} -c client.cpp client.h
 
 #*************View goes here bottom stuff**********************
 View.o: chat_message.hpp view.hpp view.cpp
