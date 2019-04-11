@@ -1,7 +1,7 @@
 #include "client.h"
-#include "client_chat.cpp"
-#include "server.h"
+#include <vector>
 
+std::vector<int> list_of_rooms (10);
 bool request_join_room(int room, int key)
 {
 	
@@ -10,8 +10,11 @@ return 0;
 
 bool request_create_room()
 {
-	
-return 0;
+	if (list_of_rooms.size() == list_of_rooms.max_size())
+	return false;
+	else
+	list_of_rooms.push_back (1);
+return true;
 }
 
 bool request_delete_room(int room_num)

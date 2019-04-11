@@ -21,14 +21,16 @@ bool create_user(std::string username, std::string password)
 string username = signup_win.get_username(),password = signup_win.get_password;
 if (list_of_users[username] == NULL)
 list_of_users.insert(pair<std::string, std::string>(username,password));
-else
+return true;
+/*else
 {
 	string username1 = change_username(std::string username);
 	std::cout << "Your username will be" << username1 << std::endl;
 	list_of_users.insert(pair<std::string, std::string>(username1,password));
-}
+	return true;
+}*/
 
-return 0;
+return false;
 }
 
 bool check_user_credentials(std::string username_l, std::string password_l)
@@ -36,19 +38,16 @@ bool check_user_credentials(std::string username_l, std::string password_l)
 //inherit two strings from log in(sign in) page//
 string username_l = login_window.get_username_input(),password_l = login_window.get_password_input();
 if (list_of_users[username_l] != password_l)
+{
+return true;
 //access denied// //reload sign in page//
-else
-{	//access granted// 
-	//load new window//
 }
-
-return 0;
+return false;
 
 }
 
-int create_room(int room_num)
+int create_room()
 //add room button pressed//
-//inherit room num//
 char x;
 if (std::find(list_of_rooms.begin(), list_of_rooms.end(), room_num) != list_of_rooms.end() )
 {
