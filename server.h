@@ -7,8 +7,8 @@
 class Server: protected chat_participant{
 public:
 	void update_message_log(char message);
-	int create_room(int key);
-	int delete_room(int room_num, int key);
+	bool create_room();
+	bool delete_room();
 	std::string change_username(std::string username);
 	bool create_user(std::string username, std::string password);
 	bool check_user_credentials(std::string username_l, std::string password_l);
