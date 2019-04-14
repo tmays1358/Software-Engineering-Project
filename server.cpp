@@ -15,6 +15,11 @@ std::string username1 = username + a;
 return username1;
 }
 
+void update_message_log(char message)
+{
+	
+}
+
 bool create_user(std::string username, std::string password)
 {
 //inherit two strings from when the user sign up//
