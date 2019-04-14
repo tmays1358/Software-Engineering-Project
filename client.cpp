@@ -41,10 +41,10 @@ bool send_message();
 return 0;
 }
 
-bool spell_check(char message);
+char* spell_check(char message);
 {
 	
-return 0;
+return line;
 }
 
 int change_room_view(int room_num)
