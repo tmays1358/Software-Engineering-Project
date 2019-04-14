@@ -1,7 +1,10 @@
 #ifndef _SERVER_H_
 #define _SERVER_H_
+#include "signup_win.h"
+#include "login_window.h"
+#include "chat_server.cpp"
 
-class Server{
+class Server: protected chat_participant{
 public:
 	void update_message_log(char message);
 	int create_room(int key);

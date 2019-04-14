@@ -1,4 +1,5 @@
 #include "server.h"
+#include <iostream>
 #include <map>
 #include <vector>
 #include <string>
@@ -39,48 +40,35 @@ bool check_user_credentials(std::string username_l, std::string password_l)
 string username_l = login_window.get_username_input(),password_l = login_window.get_password_input();
 if (list_of_users[username_l] != password_l)
 {
-return true;
+return false;
 //access denied// //reload sign in page//
 }
-return false;
+return true;
 
 }
 
-int create_room()
+bool create_room()
 //add room button pressed//
-char x;
-if (std::find(list_of_rooms.begin(), list_of_rooms.end(), room_num) != list_of_rooms.end() )
+int a = 1;
+if (list_of_rooms.size() != list_of_rooms.max_size())
 {
-	std::cout << "Room already present. Do you want to join that room?[Y/N] " <<std::endl;
-	std::cin >> char x;
-	if(x == 'Y')
-	//join_room//
-	else{
-	 std::cout << "Type in a new room number: " <<std::endl;
-	std::cin >> int new_num;
-	int create_room(int new_num);
+	list_of_rooms.insert(list_of_rooms.begin(), a);
+	return true;
+//create_room//
 }
-else
-{
-	list_of_rooms.insert(list_of_rooms.begin(), room_num);
-	//create_room//
+return false;
 }
 
-return 0;
-}
-
-int delete_room(int room_num, int key)
+bool delete_room(int room_num, int key)
 //delete room button pressed//
-if(std::find(list_of_rooms.begin(), list_of_rooms.end(), room_num != list_of_rooms.end())
+if(chat_participant.participants_.size() == 1)
 {
 
-	list_of_romms.erase (std::distance(list_of_rooms.begin(), room_num);
+	list_of_romms.erase (list_of_rooms.begin());
 	//go to lobby chat room view//
+	return true;
 }
-else
-	std::cout << "Incorrecr Credentials";
-
-return 0;
+return false;
 }
 
 int main(){
