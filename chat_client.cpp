@@ -16,9 +16,16 @@
 #include "chat_message.hpp"
 #include "login_window.hpp"
 #include "signup_win.hpp"
+#include "chat_view.hpp"
+#include "chat_window.hpp"
+
 using asio::ip::tcp;
 
 typedef std::deque<chat_message> chat_message_queue;
+
+int maxX, maxY;
+Chat_view *chat_view;
+int line_number = 1;
 
 class chat_client
 {
@@ -88,8 +95,11 @@ private:
         {
           if (!ec)
           {
-            std::cout.write(read_msg_.body(), read_msg_.body_length());
-            std::cout << "\n";
+            std::string user_msg;
+            user_msg.assign(read_msg_.body(), read_msg_.body_length());
+            std::cout << user_msg;
+            chat_view->new_msg(user_msg, line_number);
+            line_number++;
             do_read_header();
           }
           else
@@ -140,9 +150,9 @@ int main(int argc, char* argv[])
     initscr();
     noecho();
     cbreak();
-    int maxX, maxY;
-    getmaxyx(stdscr, maxY, maxX);
 
+    getmaxyx(stdscr, maxY, maxX);
+    
     //login window starts
     bool selected_login = false;
     while(!selected_login) {
@@ -164,8 +174,9 @@ int main(int argc, char* argv[])
         //need to add user to server
       } 
     } 
-    //ends
-
+    //intial login/signup ends
+    chat_view = new Chat_view(maxX, maxY);
+    chat_view->show();
     asio::io_context io_context;
 
     tcp::resolver resolver(io_context);
@@ -175,8 +186,13 @@ int main(int argc, char* argv[])
     std::thread t([&io_context](){ io_context.run(); });
 
     char line[chat_message::max_body_length + 1];
-    while (std::cin.getline(line, chat_message::max_body_length + 1))
+    Chat_window chat_win = Chat_window(maxX, maxY); //used to get message
+    chat_win.show();
+
+    while (1)
     {
+      chat_win.get_input();
+      strcpy(line, chat_win.get_user_msg().c_str());
       chat_message msg;
 	//implementing spell check//
 	//line = client.(&spell_check(line)

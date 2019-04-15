@@ -53,8 +53,8 @@ Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
 	${CXX} -c controller.cpp controller.hpp
 
 #*************final exec goes here*****************************
-chat_client: chat_client.o login_window.o signup_win.o
-	${CXX} -o chat_client chat_client.o login_window.o signup_win.o -lpthread -lncurses
+chat_client: chat_client.o login_window.o signup_win.o chat_view.o chat_window.o
+	${CXX} -o chat_client chat_client.o login_window.o signup_win.o  chat_view.o chat_window.o -lpthread -lncurses
 chat_server: chat_server.o
 	${CXX} -o chat_server chat_server.o -lpthread
 
