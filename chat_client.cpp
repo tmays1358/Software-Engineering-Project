@@ -14,7 +14,8 @@
 #include <thread>
 #include "asio.hpp"
 #include "chat_message.hpp"
-
+#include "login_window.hpp"
+#include "signup_win.hpp"
 using asio::ip::tcp;
 
 typedef std::deque<chat_message> chat_message_queue;
@@ -136,6 +137,34 @@ int main(int argc, char* argv[])
       std::cerr << "Usage: chat_client <host> <port>\n";
       return 1;
     }
+    initscr();
+    noecho();
+    cbreak();
+    int maxX, maxY;
+    getmaxyx(stdscr, maxY, maxX);
+
+    //login window starts
+    bool selected_login = false;
+    while(!selected_login) {
+      Login_window login_win = Login_window(maxY, maxX);
+      login_win.show();
+      selected_login = login_win.get_input();
+      erase();
+      refresh();
+      if(!selected_login) { //signup_selected
+        Signup_win signup = Signup_win(maxY, maxX);
+        signup.show();
+        bool ok_select = signup.get_input();
+        if(ok_select) {
+          //logic for adding user here
+        }
+        erase(); 
+        refresh();
+      } else {
+        //need to add user to server
+      } 
+    } 
+    //ends
 
     asio::io_context io_context;
 

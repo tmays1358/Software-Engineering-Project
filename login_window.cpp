@@ -5,7 +5,7 @@ Login_window::Login_window(int maxY, int maxX)
 	int sizeY = maxY/2;
 	int sizeX = maxX/2;
 	
-	login = newwin(sizeY, sizeX, maxY/4, maxX/4);
+	login = newwin(sizeY, sizeX, maxY/5, maxX/5);
 	username_window = derwin(login, 3, sizeX-12, 4, 11);
 	password_window = derwin(login, 3, sizeX-12, 7, 11);
 	login_button = derwin(login, 3, 7, sizeY-5, sizeX/3);
@@ -48,7 +48,7 @@ void Login_window::update()
 
 	return;
 }
-void Login_window::get_input(){
+bool Login_window::get_input(){
 	keypad(stdscr, true);
 	keypad(login, true);
 	keypad(username_window, true);
@@ -59,7 +59,7 @@ void Login_window::get_input(){
 	int ch;
 	int curr_window = 0;
 	bool not_done = true;
-
+        bool option = false;
 	wmove(username_window, 1, 1);
 	wrefresh(username_window);
 	
@@ -89,15 +89,16 @@ void Login_window::get_input(){
                                         break;
                                 case 2: // login
                                         not_done = false;
+                                        option =  true;
                                         break;
                                 case 3: // signup
                                         not_done = false;
+                                        option = false;
                                         break;
                                 default:
                                         break;
 			}
-		curr_window++;
-		}	
+		}
 	}
 
 	keypad(stdscr, false);
@@ -106,7 +107,7 @@ void Login_window::get_input(){
         keypad(password_window, false);
         keypad(login_button, false);
         keypad(signup_button, false);
-
+        return option;
 }
 void Login_window::getwinput(WINDOW *win, std::string &str){
         wmove(win, 1, str.size() + 1);

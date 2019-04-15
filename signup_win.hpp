@@ -7,7 +7,7 @@ class Signup_win {
 	public:
 		Signup_win(int maxY, int maxX);
 		void show();
-		void get_input();
+		bool get_input();
 		void getwinput(WINDOW *win, std::string &str);
 		void highlight_window(int selected);
 		std::string get_name();

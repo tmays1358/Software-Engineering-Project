@@ -10,7 +10,7 @@ class Login_window
         Login_window(int maxX, int maxY);
         void show();
         void update();
-        void get_input();
+        bool get_input();
 	void getwinput(WINDOW *win, std::string &str);
 	void highlight_window(int selected);
 	std::string get_username_input();

@@ -4,7 +4,7 @@ Signup_win::Signup_win(int maxY, int maxX){
 	int sizeY = maxY/2;
         int sizeX = maxX/2;
 
-        signup = newwin(sizeY, sizeX, maxY/4, maxX/4);
+        signup = newwin(sizeY, sizeX, maxY/5, maxX/5);
         name_window = derwin (signup,3, sizeX-12, 4, 11);
         email_window = derwin (signup, 3, sizeX-12, 7, 11);
         username_window = derwin (signup, 3, sizeX-12, 10, 11);
@@ -49,7 +49,7 @@ void Signup_win::show()
 	wrefresh(cancel_button);
 	wrefresh(signup);	
 }
-void Signup_win::get_input()
+bool Signup_win::get_input()
 {
 	keypad(stdscr, true);
 	keypad(signup, true);
@@ -61,6 +61,7 @@ void Signup_win::get_input()
 	int ch;
 	int curr_window = 0;
 	bool not_done = true;
+	bool option = false;
 	wmove(name_window, 1,1);
 	wrefresh(name_window);
 	while(not_done){
@@ -96,14 +97,15 @@ void Signup_win::get_input()
 					break;
 				case 4: // ok 
 					not_done = false;
+					option = true;
 					break;
 				case 5: //cancel 
 					not_done = false;
+					option = false;
 					break;
 				default:
 					break;	
 			}
-			curr_window++;
 		}
 
 	}
@@ -113,6 +115,7 @@ void Signup_win::get_input()
         keypad(email_window, false);
         keypad(username_window, false);
         keypad(password_window, false);
+	return option;
 }
 		
 void Signup_win::getwinput(WINDOW *win, std::string &str){
