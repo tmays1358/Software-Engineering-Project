@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
     {
       chat_message msg;
 	//implementing spell check//
-	line = client.(&spell_check(line)
+	//line = client.(&spell_check(line)
       msg.body_length(std::strlen(line));
       std::memcpy(msg.body(), line, msg.body_length());
       msg.encode_header();
