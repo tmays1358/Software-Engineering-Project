@@ -20,6 +20,7 @@
 #include "chat_window.hpp"
 #include "room_window.hpp"
 #include "top_bar.hpp"
+#include "join_window.hpp"
 
 using asio::ip::tcp;
 
@@ -210,7 +211,32 @@ int main(int argc, char* argv[])
       current_window = select_window(current_window);
       if(current_window == 0)
       {
-        top_win->get_input();
+        int option = top_win->get_input();
+        if (option == 0)
+        {
+          Join_window join_win = Join_window(maxX, maxY);
+          join_win.show();
+          bool ok_selected = join_win.get_input();
+          if(ok_selected){
+            /*
+              join room request logic goes here using 
+              join_win.get_room_str();
+              join_win.get_key_str();
+            */
+          }
+
+          //clears windows and repaints it
+          erase();
+          room_win->show();
+          top_win->show();
+          chat_view->show();
+          chat_win->show();
+          
+        }
+        else if(option == 1) //manage
+        {
+          
+        }
       }
       else if(current_window == 1) //choose room
       {

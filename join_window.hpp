@@ -1,19 +1,28 @@
 #ifndef JOIN_WINDOW
 #define JOIN_WINDOW
 
+#include <ncurses.h>
 #include <string>
 
 class Join_window
 {
     public:
-        Join_window();
-        void on_ok_select();
-        void on_cancel_select();
+        Join_window(int maxX, int maxY);
+        bool get_input();
+        void getwinput(WINDOW *win, std::string &str);
         void show();
-        void update();
+        void highlight_window(int selected);
+        std::string get_room_str();
+        std::string get_key_str();
     private:
-        string room_name;
-        int room_key;
+        WINDOW *join_win;
+        WINDOW *room_win;
+        WINDOW *key_win;
+        WINDOW *ok_button;
+        WINDOW *cancel_button;
+        std::string room_str;
+        std::string key_str;
+        std::string input_clear;
 };
 
 #endif
