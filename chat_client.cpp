@@ -265,7 +265,8 @@ int main(int argc, char* argv[])
       }
       else if(current_window == 2){ //message box
         chat_win->get_input();
-        strcpy(line, chat_win->get_user_msg().c_str());
+        std::string usr_msg = login_win.get_username_input() + ": " + chat_win->get_user_msg();
+        strcpy(line, usr_msg.c_str());
         chat_message msg;
         //implementing spell check (not complete therefore commented out)
         //line = client.(&spell_check(line));

@@ -12,6 +12,7 @@ class Chat_view{
 
 	private:
 		WINDOW *chat_view;
+		WINDOW *str_win;
 };
 
 #endif
