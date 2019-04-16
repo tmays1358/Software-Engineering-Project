@@ -15,6 +15,7 @@ class Chat_window{
 		void on_tab_enter();
 		void set_user_msg(std::string str);
 		std::string get_user_msg();
+		void mvmenu();
 	private:
 		WINDOW *msg_win;
 		bool file_select_button;

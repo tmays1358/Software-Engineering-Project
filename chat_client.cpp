@@ -26,6 +26,9 @@ typedef std::deque<chat_message> chat_message_queue;
 
 int maxX, maxY;
 Chat_view *chat_view;
+Room_window *room_win;
+Chat_window *chat_win;
+
 int line_number = 1;
 
 class chat_client
@@ -139,6 +142,10 @@ private:
   chat_message_queue write_msgs_;
 };
 
+int select_window(int curr_win);
+void highlight(int curr_win);
+
+
 int main(int argc, char* argv[])
 {
   try
@@ -187,24 +194,31 @@ int main(int argc, char* argv[])
     std::thread t([&io_context](){ io_context.run(); });
 
     char line[chat_message::max_body_length + 1];
-    Chat_window chat_win = Chat_window(maxX, maxY); //used to get message
-    chat_win.show();
-    
-    Room_window room_win = Room_window(maxX, maxY); //room windows
-    room_win.show();
-    room_win.get_input();
+    chat_win = new Chat_window(maxX, maxY); //used to get message
+    chat_win->show();
 
+    room_win = new Room_window(maxX, maxY); //room windows
+    room_win->show();
+    room_win->get_input();
+    int current_window = 0; 
     while (1)
     {
-      chat_win.get_input();
-      strcpy(line, chat_win.get_user_msg().c_str());
-      chat_message msg;
-	    //implementing spell check (not complete therefore commented out)
-	    //line = client.(&spell_check(line));
-      msg.body_length(std::strlen(line));
-      std::memcpy(msg.body(), line, msg.body_length());
-      msg.encode_header();
-      c.write(msg);
+      current_window = select_window(current_window);
+      if(current_window == 0) //choose room
+      {
+        room_win->get_input();
+      }
+      else if(current_window == 1){ //message box
+        chat_win->get_input();
+        strcpy(line, chat_win->get_user_msg().c_str());
+        chat_message msg;
+        //implementing spell check (not complete therefore commented out)
+        //line = client.(&spell_check(line));
+        msg.body_length(std::strlen(line));
+        std::memcpy(msg.body(), line, msg.body_length());
+        msg.encode_header();
+        c.write(msg);
+      }
     }
 
     c.close();
@@ -216,4 +230,52 @@ int main(int argc, char* argv[])
   }
 
   return 0;
+}
+
+
+void highlight(int curr_win)
+{
+  switch(curr_win){
+    case 0:
+      room_win->mvmenu();
+      break;
+    case 1:
+      chat_win->mvmenu();
+      break;
+  }
+}
+/*
+  this function is used for selecting windows such as message box, rooms and other administrative tasks
+  join room needs to be added still
+*/
+int select_window(int curr_win) 
+{
+  keypad(stdscr, true);
+  int selected = curr_win;
+  bool not_done = true;
+  int ch;
+  while(not_done)
+  {
+    ch = getch();
+    if (ch == KEY_UP || ch == KEY_LEFT)
+    {
+      selected--;
+      if (selected < 0)
+          selected = 0;
+      highlight(selected);
+    }
+    else if (ch == KEY_DOWN || ch == KEY_RIGHT)
+    {
+      selected++;
+      if (selected > 1)
+          selected = 1;
+      highlight(selected);
+    }
+    else if (ch == 10) //this means enter
+    {
+      not_done = false;
+		}
+  }
+  keypad(stdscr, false);
+  return selected;
 }

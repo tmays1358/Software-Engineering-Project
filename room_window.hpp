@@ -11,6 +11,7 @@ class Room_window
         void get_input();
         int get_current_room_select();
         void show();
+        void mvmenu();
     private:
         int current_room_select;
         WINDOW *room_win;

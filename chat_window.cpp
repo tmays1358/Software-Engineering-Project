@@ -37,7 +37,12 @@ void Chat_window::getwinput(WINDOW *win, std::string &str){
         }
 }
 
+void Chat_window::mvmenu()
+{
+	wmove(msg_win, 1, 1);
+	show();
 
+}
 //window control
 void Chat_window::update(){
 	return;

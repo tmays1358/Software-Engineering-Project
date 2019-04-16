@@ -27,6 +27,7 @@ void Room_window::get_input()
     wrefresh(room_win);
     while (not_done)
     {
+        
         ch = getch();
         if (ch == KEY_UP || ch == KEY_LEFT)
         {
@@ -44,7 +45,7 @@ void Room_window::get_input()
             wmove(room_win, current_room_select+1, 1);
             wrefresh(room_win);
         }
-        else if (ch = 10) //this means enter
+        else if (ch == 10) //this means enter
         {
             not_done = false;
 		}
@@ -62,7 +63,13 @@ int Room_window::get_current_room_select()
 void Room_window::show()
 {
     box(room_win, 0, 0);
-    wrefresh(room_win);
     refresh();
+    wrefresh(room_win);
+    return;
+}
+void Room_window::mvmenu()
+{
+    wmove(room_win, 1, 1);
+    show();
     return;
 }
