@@ -3,8 +3,8 @@
 //constructor
 Chat_window::Chat_window(int maxX, int maxY){
 	int sizeY = 3;
-	int sizeX = 4 * maxX/5 -2;
-	msg_win = newwin(sizeY, sizeX, maxY-3, maxX/5+2);
+	int sizeX = 4 * maxX/5 -1;
+	msg_win = newwin(sizeY, sizeX, maxY-3, maxX/5+1);
 	box(msg_win, 0, 0);
 	file_select_button = false;
 	for(int i = 0; i < sizeX - 1; i++)

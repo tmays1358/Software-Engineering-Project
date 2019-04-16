@@ -18,6 +18,7 @@
 #include "signup_win.hpp"
 #include "chat_view.hpp"
 #include "chat_window.hpp"
+#include "room_window.hpp"
 
 using asio::ip::tcp;
 
@@ -171,7 +172,7 @@ int main(int argc, char* argv[])
         erase(); 
         refresh();
       } else {
-        //need to add user to server
+        //need to check user credentials server
       } 
     } 
     //intial login/signup ends
@@ -188,14 +189,18 @@ int main(int argc, char* argv[])
     char line[chat_message::max_body_length + 1];
     Chat_window chat_win = Chat_window(maxX, maxY); //used to get message
     chat_win.show();
+    
+    Room_window room_win = Room_window(maxX, maxY); //room windows
+    room_win.show();
+    room_win.get_input();
 
     while (1)
     {
       chat_win.get_input();
       strcpy(line, chat_win.get_user_msg().c_str());
       chat_message msg;
-	//implementing spell check//
-	//line = client.(&spell_check(line)
+	    //implementing spell check (not complete therefore commented out)
+	    //line = client.(&spell_check(line));
       msg.body_length(std::strlen(line));
       std::memcpy(msg.body(), line, msg.body_length());
       msg.encode_header();

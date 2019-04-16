@@ -9,29 +9,23 @@ CPPFLAGS=-I/home/`whoami`/asio-1.12.2/include
 all:chat_client chat_server
 
 #test the successful compilation of object files
-object_files: chat_window.o about_tab_window.o help_tab_window.o setting_tab_window.o profile_tab_window.o signup_win.o login_window.o chat_view.o
+object_files: chat_window.o  signup_win.o login_window.o chat_view.o room_window.o
 
 #client and server
 chat_client.o: chat_client.cpp chat_message.hpp
 chat_server.o: chat_server.cpp chat_message.hpp
 
 #**************VIEW GOES HERE**********************************
-chat_window.o: chat_window.cpp chat_window.hpp
-	${CXX} -c chat_window.cpp chat_window.hpp -lncurses
-about_tab_window.o: about_tab_window.cpp about_tab_window.hpp
-	${CXX} -c about_tab_window.cpp about_tab_window.hpp
-help_tab_window.o: help_tab_window.cpp help_tab_window.hpp
-	${CXX} -c help_tab_window.cpp help_tab_window.hpp
-setting_tab_window.o: setting_tab_window.cpp setting_tab_window.hpp
-	${CXX} -c setting_tab_window.cpp setting_tab_window.hpp
-profile_tab_window.o: profile_tab_window.cpp profile_tab_window.hpp
-	${CXX} -c profile_tab_window.cpp profile_tab_window.hpp
 login_window.o: login_window.cpp login_window.hpp
 	${CXX} -c login_window.cpp login_window.hpp -lncurses
 signup_win.o: signup_win.cpp signup_win.hpp
 	${CXX} -c signup_win.cpp signup_win.hpp -lncurses
+chat_window.o: chat_window.cpp chat_window.hpp
+	${CXX} -c chat_window.cpp chat_window.hpp -lncurses
 chat_view.o: chat_view.cpp chat_view.hpp
 	${CXX} -c chat_view.cpp chat_view.hpp -lncurses
+room_window.o: room_window.cpp room_window.hpp
+	${CXX} -c room_window.cpp room_window.hpp -lncurses
 
 #*************MODEL goes here**********************************
 server.o:signup_win.h login_win.h server.h server.cpp
@@ -53,8 +47,8 @@ Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
 	${CXX} -c controller.cpp controller.hpp
 
 #*************final exec goes here*****************************
-chat_client: chat_client.o login_window.o signup_win.o chat_view.o chat_window.o
-	${CXX} -o chat_client chat_client.o login_window.o signup_win.o  chat_view.o chat_window.o -lpthread -lncurses
+chat_client: chat_client.o login_window.o signup_win.o chat_view.o chat_window.o room_window.o
+	${CXX} -o chat_client chat_client.o login_window.o signup_win.o  chat_view.o chat_window.o room_window.o -lpthread -lncurses
 chat_server: chat_server.o
 	${CXX} -o chat_server chat_server.o -lpthread
 
