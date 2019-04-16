@@ -21,7 +21,7 @@
 #include "room_window.hpp"
 #include "top_bar.hpp"
 #include "join_window.hpp"
-
+#include "manage_window.hpp"
 using asio::ip::tcp;
 
 typedef std::deque<chat_message> chat_message_queue;
@@ -235,7 +235,28 @@ int main(int argc, char* argv[])
         }
         else if(option == 1) //manage
         {
-          
+          Manage_window manage_win = Manage_window(maxX, maxY);
+          manage_win.show();
+          bool ok_selected = manage_win.get_input();
+          if(ok_selected)
+          {
+            /*
+              delete room and mute user logic
+               manage_win.get_mute_username()
+               manage_win.get_delete_button();
+            */
+          }
+          erase();
+          room_win->show();
+          top_win->show();
+          chat_view->show();
+          chat_win->show();
+        }
+        else if(option == 2) // leave
+        {
+          /*
+            logic to leave the current room
+          */
         }
       }
       else if(current_window == 1) //choose room

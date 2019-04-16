@@ -51,20 +51,20 @@ bool Join_window::get_input()
                     curr_window = 3;
             highlight_window(curr_window);
         }
-		else if (ch = 10) //this means enter
+		else if (ch == 10) //this means enter
         {
                 switch(curr_window){
-                    case 0: //username
+                    case 0: //room
                         getwinput(room_win, room_str);
                         break;
-                    case 1: //passwword
+                    case 1: //key
                         getwinput(key_win, key_str);
                         break;
-                    case 2: // login
+                    case 2: // ok
                         not_done = false;
                         option =  true;
                         break;
-                    case 3: // signup
+                    case 3: // cancel
                         not_done = false;
                         option = false;
                         break;
