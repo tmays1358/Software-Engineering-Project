@@ -9,7 +9,7 @@ CPPFLAGS=-I/home/`whoami`/asio-1.12.2/include
 all:chat_client chat_server
 
 #test the successful compilation of object files
-object_files: chat_window.o  signup_win.o login_window.o chat_view.o room_window.o
+object_files: chat_window.o  signup_win.o login_window.o chat_view.o room_window.o top_bar.o
 
 #client and server
 chat_client.o: chat_client.cpp chat_message.hpp
@@ -26,7 +26,8 @@ chat_view.o: chat_view.cpp chat_view.hpp
 	${CXX} -c chat_view.cpp chat_view.hpp -lncurses
 room_window.o: room_window.cpp room_window.hpp
 	${CXX} -c room_window.cpp room_window.hpp -lncurses
-
+top_bar.o: top_bar.cpp top_bar.hpp
+	${CXX} -c top_bar.cpp top_bar.hpp -lncurses
 #*************MODEL goes here**********************************
 server.o:signup_win.h login_win.h server.h server.cpp
 	${CXX} -c server.cpp server.h
@@ -42,13 +43,14 @@ message.o: message.hpp user.hpp message.cpp
 	${CXX} -c message.hpp message.cpp
 room.o: room.hpp room.cpp user.hpp
 	${CXX} -c room.hpp room.cpp
+	
 #*************CONTROLLER goes here*****************************
 Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
 	${CXX} -c controller.cpp controller.hpp
 
 #*************final exec goes here*****************************
-chat_client: chat_client.o login_window.o signup_win.o chat_view.o chat_window.o room_window.o
-	${CXX} -o chat_client chat_client.o login_window.o signup_win.o  chat_view.o chat_window.o room_window.o -lpthread -lncurses
+chat_client: chat_client.o login_window.o signup_win.o chat_view.o chat_window.o room_window.o top_bar.o
+	${CXX} -o chat_client chat_client.o login_window.o signup_win.o  chat_view.o chat_window.o room_window.o top_bar.o -lpthread -lncurses
 chat_server: chat_server.o
 	${CXX} -o chat_server chat_server.o -lpthread
 

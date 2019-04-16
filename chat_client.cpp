@@ -19,6 +19,7 @@
 #include "chat_view.hpp"
 #include "chat_window.hpp"
 #include "room_window.hpp"
+#include "top_bar.hpp"
 
 using asio::ip::tcp;
 
@@ -28,6 +29,7 @@ int maxX, maxY;
 Chat_view *chat_view;
 Room_window *room_win;
 Chat_window *chat_win;
+Top_bar *top_win;
 
 int line_number = 1;
 
@@ -163,14 +165,15 @@ int main(int argc, char* argv[])
     
     //login window starts
     bool selected_login = false;
+    Login_window login_win = Login_window(maxY, maxX);
+    Signup_win signup = Signup_win(maxY, maxX);
+        
     while(!selected_login) {
-      Login_window login_win = Login_window(maxY, maxX);
       login_win.show();
       selected_login = login_win.get_input();
       erase();
       refresh();
       if(!selected_login) { //signup_selected
-        Signup_win signup = Signup_win(maxY, maxX);
         signup.show();
         bool ok_select = signup.get_input();
         if(ok_select) {
@@ -192,7 +195,8 @@ int main(int argc, char* argv[])
     chat_client c(io_context, endpoints);
 
     std::thread t([&io_context](){ io_context.run(); });
-
+    top_win = new Top_bar(maxX, maxY, login_win.get_username_input(), "nice");
+    top_win->show();
     char line[chat_message::max_body_length + 1];
     chat_win = new Chat_window(maxX, maxY); //used to get message
     chat_win->show();
@@ -204,11 +208,15 @@ int main(int argc, char* argv[])
     while (1)
     {
       current_window = select_window(current_window);
-      if(current_window == 0) //choose room
+      if(current_window == 0)
+      {
+        top_win->get_input();
+      }
+      else if(current_window == 1) //choose room
       {
         room_win->get_input();
       }
-      else if(current_window == 1){ //message box
+      else if(current_window == 2){ //message box
         chat_win->get_input();
         strcpy(line, chat_win->get_user_msg().c_str());
         chat_message msg;
@@ -237,9 +245,12 @@ void highlight(int curr_win)
 {
   switch(curr_win){
     case 0:
-      room_win->mvmenu();
+      top_win->mvmenu();
       break;
     case 1:
+      room_win->mvmenu();
+      break;
+    case 2:
       chat_win->mvmenu();
       break;
   }
@@ -267,8 +278,8 @@ int select_window(int curr_win)
     else if (ch == KEY_DOWN || ch == KEY_RIGHT)
     {
       selected++;
-      if (selected > 1)
-          selected = 1;
+      if (selected > 2)
+          selected = 2;
       highlight(selected);
     }
     else if (ch == 10) //this means enter
