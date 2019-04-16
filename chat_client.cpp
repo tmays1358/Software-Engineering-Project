@@ -212,7 +212,7 @@ int main(int argc, char* argv[])
       if(current_window == 0)
       {
         int option = top_win->get_input();
-        if (option == 0)
+        if (option == 0) //join room selected
         {
           Join_window join_win = Join_window(maxX, maxY);
           join_win.show();
