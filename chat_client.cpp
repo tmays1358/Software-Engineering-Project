@@ -232,12 +232,14 @@ int main(int argc, char* argv[])
           join_win.show();
           bool ok_selected = join_win.get_input();
           if(ok_selected){
-            room_win->add_room(join_win.get_room_str());
+            
+            //add to room if correct key
             /*
               join room request logic goes here using 
               join_win.get_room_str();
               join_win.get_key_str();
             */
+            room_win->add_room(join_win.get_room_str());
           }
 
           //clears windows and repaints it
@@ -256,7 +258,7 @@ int main(int argc, char* argv[])
           if(ok_selected)
           {
             std::string username_to_mute = manage_win.get_mute_username();
-            if(username_to_mute != "")
+            if(username_to_mute != "") //check if we need to change user
             {
               bool in_muted = false;
               unsigned int index_delete = 0;
@@ -282,13 +284,13 @@ int main(int argc, char* argv[])
                 //swap
                 muted_users = new_muted_users;
               }
-              
             }
             /*
-              delete room and mute user logic
-               manage_win.get_mute_username()
+              delete room 
+              this will be a request
                manage_win.get_delete_button();
             */
+           
           }
           erase();
           room_win->show();
@@ -317,7 +319,7 @@ int main(int argc, char* argv[])
         room_win->get_input();
         top_win->set_rm_name(room_win->get_current_room_name(room_win->get_current_room_select()));
         /*
-          logic to switch rooms
+          logic to switch rooms most likely we need to switch sockets
         */
       }
       else if(current_window == 2){ //message box
