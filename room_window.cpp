@@ -6,14 +6,31 @@ Room_window::Room_window(int maxX, int maxY)
     int sizeX = maxX / 5 ;
     int sizeY = maxY - 3;
     room_win = newwin(sizeY, sizeX, 3, 0);
-    std::string room;
-    for (int i = 0; i < 10; i++)
-    {
-        room = "room " + std::to_string(i);
-        mvwprintw(room_win, i + 1, 1, room.c_str());
-    }
+    rooms.push_back("Lobby");
+    mvwprintw(room_win, 1, 1, rooms[0].c_str());
     box(room_win, 0, 0);
     scrollok(room_win, true);
+}
+
+void Room_window::add_room(std::string new_room)
+{
+    rooms.push_back(new_room);
+    for (int i = 0; i < rooms.size(); i++)
+    {
+        mvwprintw(room_win, i + 1, 1, rooms[i].c_str());
+    }
+    show();
+}
+
+void Room_window::remove_room(int room_index)
+{
+    rooms.erase(rooms.begin() + room_index);
+    rooms.shrink_to_fit();
+    for (int i = 0; i < rooms.size(); i++)
+    {
+        mvwprintw(room_win, i + 1, 1, rooms[i].c_str());
+    }
+    show();
 }
 
 void Room_window::get_input()

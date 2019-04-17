@@ -218,6 +218,7 @@ int main(int argc, char* argv[])
           join_win.show();
           bool ok_selected = join_win.get_input();
           if(ok_selected){
+            room_win->add_room(join_win.get_room_str());
             /*
               join room request logic goes here using 
               join_win.get_room_str();
@@ -257,6 +258,7 @@ int main(int argc, char* argv[])
           /*
             logic to leave the current room
           */
+          room_win->remove_room(room_win->get_current_room_select());
         }
       }
       else if(current_window == 1) //choose room
