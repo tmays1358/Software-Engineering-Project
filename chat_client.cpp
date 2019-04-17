@@ -203,6 +203,13 @@ int main(int argc, char* argv[])
     //intial login/signup ends
     chat_view = new Chat_view(maxX, maxY);
     chat_view->show();
+    chat_win = new Chat_window(maxX, maxY); //used to get message
+    chat_win->show();
+    room_win = new Room_window(maxX, maxY); //room windows
+    room_win->show();
+    top_win = new Top_bar(maxX, maxY, login_win.get_username_input(), room_win->get_current_room_name(room_win->get_current_room_select()));
+    top_win->show();
+    
     asio::io_context io_context;
 
     tcp::resolver resolver(io_context);
@@ -211,13 +218,6 @@ int main(int argc, char* argv[])
 
     std::thread t([&io_context](){ io_context.run(); });
     char line[chat_message::max_body_length + 1];
-    chat_win = new Chat_window(maxX, maxY); //used to get message
-    chat_win->show();
-
-    room_win = new Room_window(maxX, maxY); //room windows
-    room_win->show();
-    top_win = new Top_bar(maxX, maxY, login_win.get_username_input(), room_win->get_current_room_name(room_win->get_current_room_select()));
-    top_win->show();
     room_win->get_input();
     int current_window = 0; 
     while (1)

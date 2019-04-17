@@ -23,6 +23,7 @@ using asio::ip::tcp;
 //----------------------------------------------------------------------
 
 typedef std::deque<chat_message> chat_message_queue;
+std::vector<chat_message> message_transcript;
 
 //----------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ public:
   {
     //when a new person connects we need to load the previous messages to catch them up to speed
     participants_.insert(participant);
-    for (auto msg: recent_msgs_)
+    for (auto msg: message_transcript)
       participant->deliver(msg);
   }
 
@@ -56,6 +57,7 @@ public:
   void deliver(const chat_message& msg)
   {
     recent_msgs_.push_back(msg);
+    message_transcript.push_back(msg);
     while (recent_msgs_.size() > max_recent_msgs)
       recent_msgs_.pop_front();
 
