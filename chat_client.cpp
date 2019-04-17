@@ -223,7 +223,7 @@ int main(int argc, char* argv[])
     while (1)
     {
       current_window = select_window(current_window);
-      if(current_window == 0)
+      if(current_window == 0) //top bar window
       {
         int option = top_win->get_input();
         if (option == 0) //join room selected
