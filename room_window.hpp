@@ -13,6 +13,8 @@ class Room_window
         void add_room(std::string new_room);
         void remove_room(int room_index);
         int get_current_room_select();
+        void set_current_room_select(int room_select);
+        std::string get_current_room_name(int room_selection);
         void show();
         void mvmenu();
     private:

@@ -32,6 +32,8 @@ Room_window *room_win;
 Chat_window *chat_win;
 Top_bar *top_win;
 
+std::vector<std::string> muted_users;
+
 int line_number = 0;
 
 class chat_client
@@ -104,9 +106,21 @@ private:
           {
             std::string user_msg;
             user_msg.assign(read_msg_.body(), read_msg_.body_length());
-            std::cout << user_msg;
-            chat_view->new_msg(user_msg, line_number);
-            line_number++;
+            //get user name from user_msg
+            std::string user_name_str = user_msg.substr(0, user_msg.find(":"));
+            //check if user is in muted users
+            bool valid_show = true;
+            for(unsigned int i = 0; i < muted_users.size(); i++)
+            {
+              if(user_name_str == muted_users[i])
+              {
+                valid_show = false;
+              }
+            }
+            if(valid_show){
+              chat_view->new_msg(user_msg, line_number);
+              line_number++;
+            }
             do_read_header();
           }
           else
@@ -196,14 +210,14 @@ int main(int argc, char* argv[])
     chat_client c(io_context, endpoints);
 
     std::thread t([&io_context](){ io_context.run(); });
-    top_win = new Top_bar(maxX, maxY, login_win.get_username_input(), "nice");
-    top_win->show();
     char line[chat_message::max_body_length + 1];
     chat_win = new Chat_window(maxX, maxY); //used to get message
     chat_win->show();
 
     room_win = new Room_window(maxX, maxY); //room windows
     room_win->show();
+    top_win = new Top_bar(maxX, maxY, login_win.get_username_input(), room_win->get_current_room_name(room_win->get_current_room_select()));
+    top_win->show();
     room_win->get_input();
     int current_window = 0; 
     while (1)
@@ -241,6 +255,35 @@ int main(int argc, char* argv[])
           bool ok_selected = manage_win.get_input();
           if(ok_selected)
           {
+            std::string username_to_mute = manage_win.get_mute_username();
+            if(username_to_mute != "")
+            {
+              bool in_muted = false;
+              unsigned int index_delete = 0;
+              for(unsigned int i = 0; i < muted_users.size(); i++){ //check if user is muted users
+                if(muted_users[i] == username_to_mute){
+                  in_muted = true;
+                  index_delete = i;
+                }
+              }
+
+              if(!in_muted)
+                muted_users.push_back(username_to_mute);
+              else //delete user
+              {
+                std::vector<std::string> new_muted_users;
+                for(unsigned int i = 0; i < muted_users.size(); i++) //shring array of users
+                {
+                  if(i != index_delete)
+                  {
+                    new_muted_users.push_back(muted_users[i]);
+                  }
+                }
+                //swap
+                muted_users = new_muted_users;
+              }
+              
+            }
             /*
               delete room and mute user logic
                manage_win.get_mute_username()
@@ -258,12 +301,24 @@ int main(int argc, char* argv[])
           /*
             logic to leave the current room
           */
-          room_win->remove_room(room_win->get_current_room_select());
+          if(room_win->get_current_room_select() != 0){ //cant leave looby
+            room_win->remove_room(room_win->get_current_room_select());
+            room_win->show();
+            room_win->set_current_room_select(0);
+            top_win->set_rm_name(room_win->get_current_room_name(room_win->get_current_room_select()));
+            top_win->show();
+            chat_view->show();
+            chat_win->show();
+          }
         }
       }
       else if(current_window == 1) //choose room
       {
         room_win->get_input();
+        top_win->set_rm_name(room_win->get_current_room_name(room_win->get_current_room_select()));
+        /*
+          logic to switch rooms
+        */
       }
       else if(current_window == 2){ //message box
         chat_win->get_input();

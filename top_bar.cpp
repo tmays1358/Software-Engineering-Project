@@ -73,6 +73,7 @@ void Top_bar::highlight(int select){
 void Top_bar::set_rm_name(std::string room_name)
 {
     curr_room = room_name;
+    mvwprintw(top_win, 1, username.length() + 4, "                         ");
     mvwprintw(top_win, 1, username.length() + 4, curr_room.c_str());
     show();    
 }

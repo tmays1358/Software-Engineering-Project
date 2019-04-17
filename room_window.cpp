@@ -22,10 +22,28 @@ void Room_window::add_room(std::string new_room)
     show();
 }
 
+std::string Room_window::get_current_room_name(int room_selection)
+{
+    return rooms[room_selection];
+}
+
 void Room_window::remove_room(int room_index)
 {
-    rooms.erase(rooms.begin() + room_index);
-    rooms.shrink_to_fit();
+    std::vector<std::string> new_rooms;
+
+    wclear(room_win);
+
+    for(int i = 0; i < rooms.size(); i++)
+    {
+        if(i != room_index)
+        {
+            new_rooms.push_back(rooms[i]);
+        }
+    }
+
+    //clear rooms
+
+    rooms = new_rooms; //rassign new vector
     for (int i = 0; i < rooms.size(); i++)
     {
         mvwprintw(room_win, i + 1, 1, rooms[i].c_str());
@@ -57,8 +75,8 @@ void Room_window::get_input()
         else if (ch == KEY_DOWN || ch == KEY_RIGHT)
         {
             current_room_select++;
-            if (current_room_select > 9)
-                current_room_select = 9;
+            if (current_room_select > rooms.size()-1)
+                current_room_select = rooms.size()-1;
             wmove(room_win, current_room_select+1, 1);
             wrefresh(room_win);
         }
@@ -71,7 +89,10 @@ void Room_window::get_input()
     keypad(stdscr, false);
     keypad(room_win, false);
 }
-
+void Room_window::set_current_room_select(int room_select)
+{
+    current_room_select = room_select;
+}
 int Room_window::get_current_room_select()
 {
     return current_room_select;
