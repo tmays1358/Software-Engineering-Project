@@ -32,7 +32,7 @@ Room_window *room_win;
 Chat_window *chat_win;
 Top_bar *top_win;
 
-int line_number = 1;
+int line_number = 0;
 
 class chat_client
 {

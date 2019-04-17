@@ -145,6 +145,9 @@ private:
         {
           if (!ec)
           {
+            /*
+              save input here
+            */
             write_msgs_.pop_front();
             if (!write_msgs_.empty())
             {
@@ -212,7 +215,7 @@ int main(int argc, char* argv[])
     std::list<chat_server> servers;
     for (int i = 1; i < argc; ++i)
     {
-      tcp::endpoint endpoint(tcp::v4(), std::atoi(argv[i]));
+      tcp::endpoint endpoint(tcp::v4(), std::atoi(argv[i])); //to create more rooms simply change argument value
       servers.emplace_back(io_context, endpoint);
     }
 
