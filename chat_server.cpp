@@ -42,6 +42,7 @@ class chat_room
 public:
   void join(chat_participant_ptr participant)
   {
+    //when a new person connects we need to load the previous messages to catch them up to speed
     participants_.insert(participant);
     for (auto msg: recent_msgs_)
       participant->deliver(msg);
@@ -59,7 +60,10 @@ public:
       recent_msgs_.pop_front();
 
     for (auto participant: participants_)
+    {
+      //were the server sends messages to the client
       participant->deliver(msg);
+    }
   }
 
 private:
