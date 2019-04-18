@@ -15,6 +15,12 @@ void Chat_view::new_msg(std::string str, int line){
 	show();
 }
 
+void Chat_view::clear_win()
+{
+	wclear(str_win);
+	show();
+}
+
 void Chat_view::show(){
 	box(chat_view, 0, 0);
 	refresh();

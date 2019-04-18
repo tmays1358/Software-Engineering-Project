@@ -23,7 +23,6 @@ using asio::ip::tcp;
 //----------------------------------------------------------------------
 
 typedef std::deque<chat_message> chat_message_queue;
-std::vector<chat_message> message_transcript;
 
 //----------------------------------------------------------------------
 
@@ -72,6 +71,7 @@ private:
   std::set<chat_participant_ptr> participants_;
   enum { max_recent_msgs = 100 };
   chat_message_queue recent_msgs_;
+  std::vector<chat_message> message_transcript;
 };
 
 //----------------------------------------------------------------------
@@ -171,6 +171,7 @@ private:
   chat_room& room_;
   chat_message read_msg_;
   chat_message_queue write_msgs_;
+  std::vector<chat_message> message_transcript;
 };
 
 //----------------------------------------------------------------------

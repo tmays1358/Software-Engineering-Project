@@ -25,6 +25,7 @@
 using asio::ip::tcp;
 
 typedef std::deque<chat_message> chat_message_queue;
+std::string room_ids[10] =  { "9000", "9001", "9002", "9003", "9004", "9005", "9006", "9007", "9008", "9009"};
 
 int maxX, maxY;
 Chat_view *chat_view;
@@ -46,7 +47,6 @@ public:
   {
     do_connect(endpoints);
   }
-
   void write(const chat_message& msg)
   {
     asio::post(io_context_,
@@ -210,13 +210,13 @@ int main(int argc, char* argv[])
     top_win = new Top_bar(maxX, maxY, login_win.get_username_input(), room_win->get_current_room_name(room_win->get_current_room_select()));
     top_win->show();
     
-    asio::io_context io_context;
+    asio::io_context *io_context = new asio::io_context();
 
-    tcp::resolver resolver(io_context);
-    auto endpoints = resolver.resolve(argv[1], argv[2]);
-    chat_client c(io_context, endpoints);
+    tcp::resolver *resolver = new tcp::resolver(*io_context);
+    auto endpoints = resolver->resolve(argv[1], argv[2]);
+    chat_client *c = new chat_client(*io_context, endpoints);
 
-    std::thread t([&io_context](){ io_context.run(); });
+    std::thread *t = new std::thread([&io_context](){ io_context->run(); });
     char line[chat_message::max_body_length + 1];
     room_win->get_input();
     int current_window = 0; 
@@ -316,11 +316,28 @@ int main(int argc, char* argv[])
       }
       else if(current_window == 1) //choose room
       {
+        int old_room = room_win->get_current_room_select();
         room_win->get_input();
-        top_win->set_rm_name(room_win->get_current_room_name(room_win->get_current_room_select()));
-        /*
-          logic to switch rooms most likely we need to switch sockets
-        */
+        int new_room = room_win->get_current_room_select();
+        if(new_room != old_room) { //swap rooms if change in rooms
+          chat_view->clear_win();
+          line_number = 0;
+          top_win->set_rm_name(room_win->get_current_room_name(new_room));
+          /*
+            logic to switch rooms most likely we need to switch sockets
+          */
+          t->detach();
+          delete t;
+          delete resolver;
+          delete io_context;
+          delete c; 
+          io_context = new asio::io_context();
+          resolver = new tcp::resolver(*io_context);
+          auto endpoints = resolver->resolve(argv[1], room_ids[new_room].c_str());
+          c = new chat_client(*io_context, endpoints);
+          t = new std::thread([&io_context](){ io_context->run(); });
+
+        }
       }
       else if(current_window == 2){ //message box
         chat_win->get_input();
@@ -332,13 +349,13 @@ int main(int argc, char* argv[])
         msg.body_length(std::strlen(line));
         std::memcpy(msg.body(), line, msg.body_length());
         msg.encode_header();
-        c.write(msg);
+        c->write(msg);
       }
     }
 
-    c.close();
-    t.join();
-  }
+    c->close();
+    t->join();
+  } 
   catch (std::exception& e)
   {
     std::cerr << "Exception: " << e.what() << "\n";
