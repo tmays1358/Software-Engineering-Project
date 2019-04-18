@@ -39,18 +39,6 @@ bool block_user(char *username)
     return true;
 }
 
-bool logout();
-{
-	
-    return 0;
-}
-
-bool send_message();
-{
-	
-    return 0;
-}
-
 char* spell_check(char message);
 {
 	

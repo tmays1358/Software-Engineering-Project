@@ -1,7 +1,7 @@
 #ifndef _CLIENT_H_
 #define _CLIENT_H_
 
-#include "View.hpp"
+#include "server.h"
 #include <stdio.h>
 
 class Client{
@@ -10,8 +10,6 @@ class Client{
 	bool request_create_room();
 	bool request_delete_room(int room_number);
 	bool block_user(char *username);
-	bool logout();
-	bool send_message();
 	bool spell_check(char message);
 	int change_room_view(int room_num);
 
