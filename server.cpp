@@ -10,16 +10,9 @@ bool create_user(std::string username, std::string password)
 {
 //inherit two strings from when the user sign up//
 
-if (list_of_users[username] == NULL)
+if (list_of_users[username] == NULL){
 list_of_users.insert(pair<std::string, std::string>(username,password));
-return true;
-/*else
-{
-	string username1 = change_username(std::string username);
-	std::cout << "Your username will be" << username1 << std::endl;
-	list_of_users.insert(pair<std::string, std::string>(username1,password));
-	return true;
-}*/
+return true;}
 
 return false;
 }
@@ -36,7 +29,7 @@ return true;
 
 }
 
-bool create_room()
+bool create_room(){
 //add room button pressed//
 int a = 1;
 if (list_of_rooms.size() != list_of_rooms.max_size())
@@ -48,9 +41,9 @@ if (list_of_rooms.size() != list_of_rooms.max_size())
 return false;
 }
 
-bool delete_room(int room_num, int key)
+bool delete_room(int room_num, int key){
 //delete room button pressed//
-if(chat_participant.participants_.size() == 1)
+if(chat_participant::participants_.size() == 1)
 {
 
 	list_of_romms.erase (list_of_rooms.begin());
