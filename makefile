@@ -33,7 +33,7 @@ join_window.o: join_window.cpp join_window.hpp
 manage_window.o: manage_window.cpp manage_window.hpp
 	${CXX} -c manage_window.cpp manage_window.hpp -lncurses
 #*************MODEL goes here**********************************
-server.o:signup_win.h login_win.h server.h server.cpp
+server.o:chat_server.h server.h server.cpp
 	${CXX} -c server.cpp server.h
 client.o: rooms.h client.h client.cpp
 	${CXX} -c client.cpp client.h
