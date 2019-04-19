@@ -64,29 +64,43 @@ public:
   void deliver(const chat_message& msg)
   {
     //std::cout << "room " << index << " has " << participants_.size() << " participants" << std::endl;    
+    chat_message user_msg;
+    std::string str = obfuscutate_msg(msg);
+    user_msg.body_length(str.size());
+    std::memcpy(user_msg.body(), str.c_str(), msg.body_length());
+    user_msg.encode_header();
     file.open(rf_names[index].c_str(),std::fstream::app);
     std::string s_msg;
-    s_msg.assign(msg.body(), msg.body_length());
+    s_msg.assign(user_msg.body(), user_msg.body_length());
     file << s_msg << '\n';
     file.close();
-    recent_msgs_.push_back(msg);
-    message_transcript.push_back(msg);
+    recent_msgs_.push_back(user_msg);
+    message_transcript.push_back(user_msg);
     while (recent_msgs_.size() > max_recent_msgs)
       recent_msgs_.pop_front();
 
     for (auto participant: participants_)
     {
       //were the server sends messages to the client
-      participant->deliver(msg);
+      participant->deliver(user_msg);
     }
   }
-
+  std::string obfuscutate_msg(chat_message msg)
+  {   
+    std::string new_msg;
+    new_msg.assign(msg.body(), msg.body_length());
+    for(unsigned int i = 0; i < new_msg.size(); i++)
+    {
+      new_msg[i] = new_msg[i] + key;
+    }
+    return new_msg;
+  }
 private:
   std::set<chat_participant_ptr> participants_;
   enum { max_recent_msgs = 100 };
   chat_message_queue recent_msgs_;
   int index = index_files++;
-  int key;
+  int key = index_files - 1;
   std::vector<chat_message> message_transcript;
 };
 

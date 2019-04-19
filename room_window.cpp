@@ -98,7 +98,10 @@ int Room_window::get_current_room_select()
 {
     return current_room_select;
 }
-
+int Room_window::get_num_of_rooms()
+{
+    return rooms->size();
+}
 void Room_window::show()
 {
     for (int i = 0; i < rooms->size(); i++)

@@ -15,6 +15,7 @@ class Room_window
         int get_current_room_select();
         void set_current_room_select(int room_select);
         std::string get_current_room_name(int room_selection);
+        int get_num_of_rooms();
         void show();
         void mvmenu();
     private:

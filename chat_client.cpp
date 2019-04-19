@@ -26,7 +26,8 @@ using asio::ip::tcp;
 
 typedef std::deque<chat_message> chat_message_queue;
 std::string room_ids[10] =  { "9000", "9001", "9002", "9003", "9004", "9005", "9006", "9007", "9008", "9009"};
-
+int keys[11];
+int key = 0;
 int maxX, maxY;
 Chat_view *chat_view;
 Room_window *room_win;
@@ -105,8 +106,8 @@ private:
           if (!ec)
           {
             std::string user_msg;
-            user_msg.assign(read_msg_.body(), read_msg_.body_length());
             //get user name from user_msg
+            user_msg = unencrypt_msg(read_msg_);
             std::string user_name_str = user_msg.substr(0, user_msg.find(":"));
             //check if user is in muted users
             bool valid_show = true;
@@ -129,7 +130,16 @@ private:
           }
         });
   }
-
+  std::string unencrypt_msg(chat_message msg)
+  {   
+    std::string new_msg;
+    new_msg.assign(msg.body(), msg.body_length());
+    for(unsigned int i = 0; i < new_msg.size(); i++)
+    {
+      new_msg[i] = new_msg[i] - key;
+    }
+    return new_msg;
+  }
   void do_write()
   {
     asio::async_write(socket_,
@@ -234,13 +244,7 @@ int main(int argc, char* argv[])
           join_win.show();
           bool ok_selected = join_win.get_input();
           if(ok_selected){
-            
-            //add to room if correct key
-            /*
-              join room request logic goes here using 
-              join_win.get_room_str();
-              join_win.get_key_str();
-            */
+            keys[room_win->get_num_of_rooms()] = std::stoi(join_win.get_key_str());
             room_win->add_room(join_win.get_room_str());
           }
 
@@ -331,6 +335,7 @@ int main(int argc, char* argv[])
         room_win->get_input();
         int new_room = room_win->get_current_room_select();
         if(new_room != old_room) { //swap rooms if change in rooms
+          key = keys[new_room];
           chat_view->clear_win();
           line_number = 0;
           top_win->set_rm_name(room_win->get_current_room_name(new_room));
