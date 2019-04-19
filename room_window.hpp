@@ -20,7 +20,7 @@ class Room_window
     private:
         int current_room_select;
         WINDOW *room_win;
-        std::vector<std::string> rooms;
+        std::vector<std::string> *rooms;
 };
 
 #endif

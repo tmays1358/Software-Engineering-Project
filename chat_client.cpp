@@ -193,11 +193,13 @@ int main(int argc, char* argv[])
         bool ok_select = signup.get_input();
         if(ok_select) {
           //logic for adding user here
+          
         }
         erase(); 
         refresh();
       } else {
         //need to check user credentials server
+      
       } 
     } 
     //intial login/signup ends
@@ -303,14 +305,23 @@ int main(int argc, char* argv[])
           /*
             logic to leave the current room
           */
-          if(room_win->get_current_room_select() != 0){ //cant leave looby
+            if(room_win->get_current_room_select() != 0){ //cant leave looby
+            chat_view->clear_win();
+            line_number = 0;
+            top_win->set_rm_name(room_win->get_current_room_name(0));
             room_win->remove_room(room_win->get_current_room_select());
-            room_win->show();
             room_win->set_current_room_select(0);
-            top_win->set_rm_name(room_win->get_current_room_name(room_win->get_current_room_select()));
-            top_win->show();
-            chat_view->show();
-            chat_win->show();
+            t->detach();
+            delete t;
+            delete resolver;
+            delete io_context;
+            delete c; 
+            io_context = new asio::io_context();
+            resolver = new tcp::resolver(*io_context);
+            auto endpoints = resolver->resolve(argv[1], room_ids[0].c_str());
+            c = new chat_client(*io_context, endpoints);
+            t = new std::thread([&io_context](){ io_context->run(); });
+            
           }
         }
       }
@@ -345,7 +356,7 @@ int main(int argc, char* argv[])
         strcpy(line, usr_msg.c_str());
         chat_message msg;
         //implementing spell check (not complete therefore commented out)
-        //line = client.(&spell_check(line));
+        // line = client.(&spell_check(line));
         msg.body_length(std::strlen(line));
         std::memcpy(msg.body(), line, msg.body_length());
         msg.encode_header();

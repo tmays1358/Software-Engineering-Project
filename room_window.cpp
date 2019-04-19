@@ -6,47 +6,48 @@ Room_window::Room_window(int maxX, int maxY)
     int sizeX = maxX / 5 ;
     int sizeY = maxY - 3;
     room_win = newwin(sizeY, sizeX, 3, 0);
-    rooms.push_back("Lobby");
-    mvwprintw(room_win, 1, 1, rooms[0].c_str());
+    rooms = new std::vector<std::string>;
+    rooms->push_back("Lobby");
+    mvwprintw(room_win, 1, 1, (*rooms)[0].c_str());
     box(room_win, 0, 0);
     scrollok(room_win, true);
 }
 
 void Room_window::add_room(std::string new_room)
 {
-    rooms.push_back(new_room);
-    for (int i = 0; i < rooms.size(); i++)
+    rooms->push_back(new_room);
+    for (int i = 0; i < rooms->size(); i++)
     {
-        mvwprintw(room_win, i + 1, 1, rooms[i].c_str());
+        mvwprintw(room_win, i + 1, 1, (*rooms)[i].c_str());
     }
     show();
 }
 
 std::string Room_window::get_current_room_name(int room_selection)
 {
-    return rooms[room_selection];
+    return (*rooms)[room_selection];
 }
 
 void Room_window::remove_room(int room_index)
 {
-    std::vector<std::string> new_rooms;
+    std::vector<std::string> *new_rooms = new std::vector<std::string>;
 
     wclear(room_win);
 
-    for(int i = 0; i < rooms.size(); i++)
+    for(int i = 0; i < rooms->size(); i++)
     {
         if(i != room_index)
         {
-            new_rooms.push_back(rooms[i]);
+            new_rooms->push_back((*rooms)[i]);
         }
     }
 
     //clear rooms
-
+    delete rooms;
     rooms = new_rooms; //rassign new vector
-    for (int i = 0; i < rooms.size(); i++)
+    for (int i = 0; i < rooms->size(); i++)
     {
-        mvwprintw(room_win, i + 1, 1, rooms[i].c_str());
+        mvwprintw(room_win, i + 1, 1, (*rooms)[i].c_str());
     }
     show();
 }
@@ -75,8 +76,8 @@ void Room_window::get_input()
         else if (ch == KEY_DOWN || ch == KEY_RIGHT)
         {
             current_room_select++;
-            if (current_room_select > rooms.size()-1)
-                current_room_select = rooms.size()-1;
+            if (current_room_select > rooms->size()-1)
+                current_room_select = rooms->size()-1;
             wmove(room_win, current_room_select+1, 1);
             wrefresh(room_win);
         }
@@ -100,6 +101,10 @@ int Room_window::get_current_room_select()
 
 void Room_window::show()
 {
+    for (int i = 0; i < rooms->size(); i++)
+    {
+        mvwprintw(room_win, i + 1, 1, (*rooms)[i].c_str());
+    }
     box(room_win, 0, 0);
     refresh();
     wrefresh(room_win);
