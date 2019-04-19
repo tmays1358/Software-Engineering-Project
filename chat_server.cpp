@@ -17,13 +17,15 @@
 #include <utility>
 #include "asio.hpp"
 #include "chat_message.hpp"
-
+#include <fstream>
 using asio::ip::tcp;
 
 //----------------------------------------------------------------------
 
 typedef std::deque<chat_message> chat_message_queue;
-
+std::string rf_names[11] = {"lobby.txt", "room1.txt", "room2.txt", "room2.txt", "room3.txt", "room4.txt", "room5.txt", "room6.txt", "room7.txt", "room8.txt", "room9.txt"};
+std::ofstream file;
+int index_files = 0;
 //----------------------------------------------------------------------
 
 class chat_participant
@@ -51,10 +53,22 @@ public:
   void leave(chat_participant_ptr participant)
   {
     participants_.erase(participant);
+    //check if not lobby and if no participants
+    if (index != 0 && participants_.size() == 0) //check if we can delete
+    {
+      file.open(rf_names[index].c_str(), std::ofstream::trunc);
+      file.close(); //clears chat essentially making it new
+    }
   }
 
   void deliver(const chat_message& msg)
   {
+    //std::cout << "room " << index << " has " << participants_.size() << " participants" << std::endl;    
+    file.open(rf_names[index].c_str(),std::fstream::app);
+    std::string s_msg;
+    s_msg.assign(msg.body(), msg.body_length());
+    file << s_msg << '\n';
+    file.close();
     recent_msgs_.push_back(msg);
     message_transcript.push_back(msg);
     while (recent_msgs_.size() > max_recent_msgs)
@@ -71,6 +85,7 @@ private:
   std::set<chat_participant_ptr> participants_;
   enum { max_recent_msgs = 100 };
   chat_message_queue recent_msgs_;
+  int index = index_files++;
   int key;
   std::vector<chat_message> message_transcript;
 };
