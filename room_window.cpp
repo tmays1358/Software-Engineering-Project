@@ -15,12 +15,15 @@ Room_window::Room_window(int maxX, int maxY)
 
 void Room_window::add_room(std::string new_room)
 {
-    rooms->push_back(new_room);
-    for (int i = 0; i < rooms->size(); i++)
+    if(rooms->size() < 11) //testing if max capacity
     {
-        mvwprintw(room_win, i + 1, 1, (*rooms)[i].c_str());
+        rooms->push_back(new_room);
+        for (int i = 0; i < rooms->size(); i++)
+        {
+            mvwprintw(room_win, i + 1, 1, (*rooms)[i].c_str());
+        }
+        show();
     }
-    show();
 }
 
 std::string Room_window::get_current_room_name(int room_selection)

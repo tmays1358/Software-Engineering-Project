@@ -243,9 +243,15 @@ int main(int argc, char* argv[])
           Join_window join_win = Join_window(maxX, maxY);
           join_win.show();
           bool ok_selected = join_win.get_input();
-          if(ok_selected){
-            keys[room_win->get_num_of_rooms()] = std::stoi(join_win.get_key_str());
-            room_win->add_room(join_win.get_room_str());
+          if(ok_selected && room_win->get_num_of_rooms() < 11){
+            try{
+              keys[room_win->get_num_of_rooms()] = std::stoi(join_win.get_key_str());
+              room_win->add_room(join_win.get_room_str());
+            }
+            catch(std::exception &cb)
+            {
+              keys[room_win->get_num_of_rooms()-1] = 0;
+            }
           }
 
           //clears windows and repaints it
