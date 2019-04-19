@@ -6,7 +6,11 @@ CXXFLAGS=-Wall -g -std=c++11
 #for best results move asio-1.12.2 to home folder
 CPPFLAGS=-I/home/`whoami`/asio-1.12.2/include
 
-all:chat_client chat_server
+all:chat_client chat_server sorted_words
+
+#sort words for easy indexing
+sorted_words: words.txt
+	cat words.txt | sort >> sorted_words.txt
 
 #test the successful compilation of object files
 object_files: chat_window.o  signup_win.o login_window.o chat_view.o room_window.o top_bar.o join_window.o manage_window.o
@@ -59,4 +63,4 @@ chat_server: chat_server.o
 	${CXX} -o chat_server chat_server.o -lpthread
 
 clean:
-	-rm -f chat_server chat_client chat_window *.o *.gch
+	-rm -f chat_server chat_client chat_window *.o *.gch sorted_words.txt
