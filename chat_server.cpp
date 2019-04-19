@@ -250,9 +250,10 @@ int main(int argc, char* argv[])
     asio::io_context io_context;
 
     std::list<chat_server> servers;
-    for (int i = 1; i < argc; ++i)
+    for (int i = 0; i < 11; ++i)
     {
-      tcp::endpoint endpoint(tcp::v4(), std::atoi(argv[i])); //to create more rooms simply change argument value
+      int port = atoi(argv[1]);
+      tcp::endpoint endpoint(tcp::v4(), port + i); //to create more rooms simply change argument value
       servers.emplace_back(io_context, endpoint);
     }
 

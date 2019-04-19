@@ -25,7 +25,7 @@
 using asio::ip::tcp;
 
 typedef std::deque<chat_message> chat_message_queue;
-std::string room_ids[10] =  { "9000", "9001", "9002", "9003", "9004", "9005", "9006", "9007", "9008", "9009"};
+std::string room_ids[11] =  { "9000", "9001", "9002", "9003", "9004", "9005", "9006", "9007", "9008", "9009", "9010"};
 int keys[11];
 int key = 0;
 int maxX, maxY;
@@ -243,14 +243,13 @@ int main(int argc, char* argv[])
           Join_window join_win = Join_window(maxX, maxY);
           join_win.show();
           bool ok_selected = join_win.get_input();
-          if(ok_selected && room_win->get_num_of_rooms() < 11){
+          if(ok_selected){
             try{
-              keys[room_win->get_num_of_rooms()] = std::stoi(join_win.get_key_str());
-              room_win->add_room(join_win.get_room_str());
+              keys[std::stoi(join_win.get_room_num_str())] = std::stoi(join_win.get_key_str());
+              room_win->add_room(join_win.get_room_str(), std::stoi(join_win.get_room_num_str()));
             }
             catch(std::exception &cb)
             {
-              keys[room_win->get_num_of_rooms()-1] = 0;
             }
           }
 
@@ -316,6 +315,7 @@ int main(int argc, char* argv[])
             logic to leave the current room
           */
             if(room_win->get_current_room_select() != 0){ //cant leave looby
+            key = 0;
             chat_view->clear_win();
             line_number = 0;
             top_win->set_rm_name(room_win->get_current_room_name(0));

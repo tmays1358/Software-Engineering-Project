@@ -7,6 +7,7 @@ Join_window::Join_window(int maxX, int maxY)
     join_win = newwin(sizeY, sizeX, maxY/5, maxX/5);
 	room_win = derwin(join_win, 3, sizeX-12, 4, 11);
 	key_win = derwin(join_win, 3, sizeX-12, 7, 11);
+    room_num = derwin(join_win, 3, sizeX-12, 10, 11);
     ok_button = derwin(join_win, 3, 4, sizeY-5, sizeX/3);
 	cancel_button = derwin(join_win, 3, 8, sizeY-5, sizeX/3+10);
 
@@ -16,8 +17,10 @@ Join_window::Join_window(int maxX, int maxY)
     mvwprintw(join_win, 2, sizeX/3, "Join");
 	mvwprintw(join_win, 5, 1, "Room name:");
 	mvwprintw(join_win, 8, 1, "Key: ");
+    mvwprintw(join_win, 11, 1, "Room #: ");
 	mvwprintw(ok_button, 1, 1, "OK");
 	mvwprintw(cancel_button, 1, 1, "CANCEL");
+    box(room_num, 0 ,0);
 	box(join_win, 0, 0);
 	box(room_win, 0, 0);
 	box(key_win, 0, 0);
@@ -60,11 +63,14 @@ bool Join_window::get_input()
                     case 1: //key
                         getwinput(key_win, key_str);
                         break;
-                    case 2: // ok
+                    case 2:
+                        getwinput(room_num, room_num_str);
+                        break;
+                    case 3: // ok
                         not_done = false;
                         option =  true;
                         break;
-                    case 3: // cancel
+                    case 4: // cancel
                         not_done = false;
                         option = false;
                         break;
@@ -105,10 +111,14 @@ void Join_window::highlight_window(int selected){
 			            wrefresh(key_win);
                         break;
                 case 2:
+                        wmove(room_num, 1, 1);
+                        wrefresh(room_num);
+                        break;
+                case 3:
                         wmove(ok_button, 1,1);
                         wrefresh(ok_button);
                         break;
-                case 3:
+                case 4:
                         wmove(cancel_button, 1,1);
                         wrefresh(cancel_button);
                         break;
@@ -116,6 +126,7 @@ void Join_window::highlight_window(int selected){
 }
 void Join_window::show()
 {
+    box(room_num, 0 , 0);
     box(join_win, 0, 0);
 	box(room_win, 0, 0);
 	box(key_win, 0, 0);
@@ -123,6 +134,7 @@ void Join_window::show()
 	box(cancel_button, 0, 0);
 
 	refresh();
+    wrefresh(room_num);
 	wrefresh(cancel_button);
 	wrefresh(room_win);
 	wrefresh(key_win);
@@ -138,4 +150,8 @@ std::string Join_window::get_room_str()
 std::string Join_window::get_key_str()
 {
     return key_str;
+}
+std::string Join_window::get_room_num_str()
+{
+    return room_num_str;
 }
