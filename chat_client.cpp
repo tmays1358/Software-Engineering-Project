@@ -37,7 +37,7 @@ Top_bar *top_win;
 std::vector<std::string> muted_users;
 
 int line_number = 0;
-
+int file_i = 0;
 class chat_client
 {
 public:
@@ -108,19 +108,41 @@ private:
             std::string user_msg;
             //get user name from user_msg
             user_msg = unencrypt_msg(read_msg_);
-            std::string user_name_str = user_msg.substr(0, user_msg.find(":"));
-            //check if user is in muted users
-            bool valid_show = true;
-            for(unsigned int i = 0; i < muted_users.size(); i++)
+            //check if message if for file transfer
+            std::string token_recieved = user_msg.substr(0, user_msg.find(':'));
+            if(token_recieved == "!@!save_file")
             {
-              if(user_name_str == muted_users[i])
-              {
-                valid_show = false;
-              }
-            }
-            if(valid_show){
-              chat_view->new_msg(user_msg, line_number);
+              std::string file_info = user_msg.substr(user_msg.find(':')+1, user_msg.find('?')-user_msg.find(':')-1);
+              std::string filename = file_info.substr(0, file_info.find('.'));
+              std::string ext = file_info.substr(file_info.find('.')+1, file_info.size() - file_info.find('.')-1);
+              filename+="_copy" + std::to_string(file_i); //uniquenes
+              file_i++;
+              std::string directory = "../" + filename + '.' + ext;
+              std::ofstream ofs;
+              ofs.open(directory.c_str());              
+              std::string file_contents = user_msg.substr(user_msg.find('?')+1, user_msg.size()-(user_msg.find('?')+1));
+              ofs << file_contents;
+              ofs.close();
+
+              chat_view->new_msg("recieved file: " + directory, line_number);
               line_number++;
+            }
+            else
+            {
+              std::string user_name_str = user_msg.substr(0, user_msg.find(":"));
+              //check if user is in muted users
+              bool valid_show = true;
+              for(unsigned int i = 0; i < muted_users.size(); i++)
+              {
+                if(user_name_str == muted_users[i])
+                {
+                  valid_show = false;
+                }
+              }
+              if(valid_show){
+                chat_view->new_msg(user_msg, line_number);
+                line_number++;
+              }
             }
             do_read_header();
           }
@@ -388,8 +410,28 @@ int main(int argc, char* argv[])
       }
       else if(current_window == 2){ //message box
         chat_win->get_input();
-        std::string usr_msg = login_win.get_username_input() + ": " + chat_win->get_user_msg();
-        strcpy(line, usr_msg.c_str());
+        std::string sent_head = "!@!save_file:";
+        std::string inputed = chat_win->get_user_msg();
+        std::string token = inputed.substr(0, inputed.find(':'));
+        if(token == "!@!send_file")
+        {
+          std::string directory = "../";
+          std::string filename;
+          filename = inputed.substr(inputed.find(':')+1, inputed.size()-inputed.find(':'));
+          directory += filename;
+          std::string file_contents;
+          sent_head += filename + '?';
+          std::ifstream inputted_file; //read from inputfile
+          inputted_file.open(directory.c_str());
+          while(std::getline(inputted_file, file_contents))
+            sent_head += file_contents;
+          inputted_file.close();
+          
+          strcpy(line, sent_head.c_str());
+        }else{
+          std::string usr_msg = login_win.get_username_input() + ": " + chat_win->get_user_msg();
+          strcpy(line, usr_msg.c_str());
+        }
         chat_message msg;
         //implementing spell check (not complete therefore commented out)
         // line = client.(&spell_check(line));
