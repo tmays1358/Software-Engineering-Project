@@ -10,7 +10,7 @@ string line = "";
 char data[370099][20];
 int q = 0;
 ifstream myfile;
-myfile.open("s_words.txt");
+myfile.open("sorted_words.txt");
 while(getline(myfile, line)){
 		//printf("%s\n", line.c_str());
 		strncpy(data[q], line.c_str(), 20);
