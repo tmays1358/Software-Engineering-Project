@@ -7,7 +7,7 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-
+#include <fstream>
 #include <cstdlib>
 #include <deque>
 #include <iostream>
@@ -171,7 +171,20 @@ private:
 
 int select_window(int curr_win);
 void highlight(int curr_win);
-
+bool user_exists(std::string usercred)
+{
+  std::string str;
+  std::ifstream ifs;
+  ifs.open("user.Superchat");
+  while(std::getline(ifs, str))
+  {
+    if(str.compare(usercred) == 0)
+    {
+      return true;
+    }
+  }
+  return false;
+}
 
 int main(int argc, char* argv[])
 {
@@ -190,10 +203,11 @@ int main(int argc, char* argv[])
     
     //login window starts
     bool selected_login = false;
+    bool is_login_valid = false;
     Login_window login_win = Login_window(maxY, maxX);
     Signup_win signup = Signup_win(maxY, maxX);
         
-    while(!selected_login) {
+    while(!is_login_valid) {
       login_win.show();
       selected_login = login_win.get_input();
       erase();
@@ -203,13 +217,24 @@ int main(int argc, char* argv[])
         bool ok_select = signup.get_input();
         if(ok_select) {
           //logic for adding user here
-          
+          std::string user_cred = signup.get_username() + ':' + signup.get_password();
+          if(!user_exists(user_cred))
+          {
+            std::ofstream ofs;
+            ofs.open("user.Superchat", std::fstream::app);
+            ofs << '\n' << user_cred;
+            ofs.close();
+          }
         }
         erase(); 
         refresh();
       } else {
         //need to check user credentials server
-      
+        std::string login_info = login_win.get_username_input() + ':' + login_win.get_password_input();
+        if(user_exists(login_info))
+        {
+          is_login_valid = true;
+        }
       } 
     } 
     //intial login/signup ends
