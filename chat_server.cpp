@@ -25,6 +25,7 @@ using asio::ip::tcp;
 typedef std::deque<chat_message> chat_message_queue;
 std::string rf_names[11] = {"lobby.txt", "room1.txt", "room2.txt", "room2.txt", "room3.txt", "room4.txt", "room5.txt", "room6.txt", "room7.txt", "room8.txt", "room9.txt"};
 std::ofstream file;
+std::vector<std::vector<chat_message>> message_logs;
 int index_files = 0;
 //----------------------------------------------------------------------
 
@@ -46,7 +47,18 @@ public:
   {
     //when a new person connects we need to load the previous messages to catch them up to speed
     participants_.insert(participant);
-    for (auto msg: message_transcript)
+    std::ifstream ifs;
+    ifs.open(rf_names[index].c_str());
+    std::string str;
+    while(std::getline(ifs, str))
+    {
+      chat_message user_msg;
+      user_msg.body_length(str.size());
+      std::memcpy(user_msg.body(), str.c_str(), user_msg.body_length());
+      user_msg.encode_header();
+      message_logs[index].push_back(user_msg);
+    }
+    for (auto msg: message_logs[index])
       participant->deliver(msg);
   }
 
@@ -56,6 +68,7 @@ public:
     //check if not lobby and if no participants
     if (index != 0 && participants_.size() == 0) //check if we can delete
     {
+      message_logs[index].clear();
       file.open(rf_names[index].c_str(), std::ofstream::trunc);
       file.close(); //clears chat essentially making it new
     }
@@ -75,7 +88,6 @@ public:
     file << s_msg << '\n';
     file.close();
     recent_msgs_.push_back(user_msg);
-    message_transcript.push_back(user_msg);
     while (recent_msgs_.size() > max_recent_msgs)
       recent_msgs_.pop_front();
 
@@ -101,7 +113,6 @@ private:
   chat_message_queue recent_msgs_;
   int index = index_files++;
   int key = index_files - 1;
-  std::vector<chat_message> message_transcript;
 };
 
 //----------------------------------------------------------------------
@@ -246,13 +257,26 @@ int main(int argc, char* argv[])
       std::cerr << "Usage: chat_server <port> [<port> ...]\n";
       return 1;
     }
-
+    
+    char response;
+    std::cout << "Clean start? ";
+    std::cin >> response;
+    if(response == 'y')
+    {
+      for(int index = 0; index < 11; index++)
+      {
+        file.open(rf_names[index].c_str(), std::ofstream::trunc);
+        file.close();
+      }
+    }
     asio::io_context io_context;
 
     std::list<chat_server> servers;
     for (int i = 0; i < 11; ++i)
     {
       int port = atoi(argv[1]);
+      std::vector<chat_message> logs;
+      message_logs.push_back(logs);
       tcp::endpoint endpoint(tcp::v4(), port + i); //to create more rooms simply change argument value
       servers.emplace_back(io_context, endpoint);
     }
