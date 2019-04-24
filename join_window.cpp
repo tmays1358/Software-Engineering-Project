@@ -50,20 +50,20 @@ bool Join_window::get_input()
         else if(ch == KEY_DOWN || ch == KEY_RIGHT)
         {
             curr_window++;
-            if (curr_window > 3)
-                    curr_window = 3;
+            if (curr_window > 4)
+                    curr_window = 4;
             highlight_window(curr_window);
         }
 		else if (ch == 10) //this means enter
         {
                 switch(curr_window){
-                    case 0: //room
+                    case 0: //room name
                         getwinput(room_win, room_str);
                         break;
                     case 1: //key
                         getwinput(key_win, key_str);
                         break;
-                    case 2:
+                    case 2: //room number
                         getwinput(room_num, room_num_str);
                         break;
                     case 3: // ok
