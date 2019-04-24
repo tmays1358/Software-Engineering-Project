@@ -60,6 +60,7 @@ public:
     }
     for (auto msg: message_logs[index])
       participant->deliver(msg);
+    message_logs[index].clear();
   }
 
   void leave(chat_participant_ptr participant)
