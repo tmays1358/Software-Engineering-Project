@@ -279,7 +279,8 @@ int main(int argc, char* argv[])
     char line[chat_message::max_body_length + 1];
     room_win->get_input();
     int current_window = 0; 
-    while (1)
+    bool is_logged_in = true;
+    while (is_logged_in)
     {
       current_window = select_window(current_window);
       if(current_window == 0) //top bar window
@@ -343,12 +344,8 @@ int main(int argc, char* argv[])
                 muted_users = new_muted_users;
               }
             }
-            /*
-              delete room 
-              this will be a request
-               manage_win.get_delete_button();
-            */
-           
+
+            is_logged_in = !manage_win.get_delete_button();
           }
           erase();
           room_win->show();
@@ -441,7 +438,8 @@ int main(int argc, char* argv[])
         c->write(msg);
       }
     }
-
+    erase();
+    refresh();
     c->close();
     t->join();
   } 

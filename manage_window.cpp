@@ -14,7 +14,7 @@ Manage_window::Manage_window(int maxX, int maxY)
 		input_clear.push_back(' ');
     
     mvwprintw(manage_win, 2, sizeX/3, "Join");
-	mvwprintw(manage_win, 5, 1, "Delete:");
+	mvwprintw(manage_win, 5, 1, "Log out:");
 	mvwprintw(manage_win, 8, 1, "Mute user: ");
 	mvwprintw(ok_button, 1, 1, "OK");
 	mvwprintw(cancel_button, 1, 1, "CANCEL");
