@@ -36,25 +36,6 @@ join_window.o: join_window.cpp join_window.hpp
 	${CXX} -c join_window.cpp join_window.hpp -lncurses
 manage_window.o: manage_window.cpp manage_window.hpp
 	${CXX} -c manage_window.cpp manage_window.hpp -lncurses
-#*************MODEL goes here**********************************
-server.o:chat_server.h server.h server.cpp
-	${CXX} -c server.cpp server.h
-client.o: rooms.h client.h client.cpp
-	${CXX} -c client.cpp client.h
-
-#*************View goes here bottom stuff**********************
-View.o: chat_message.hpp view.hpp view.cpp
-	${CXX} -c view.cpp view.hpp
-user.o: user.hpp user.cpp
-	${CXX} -c user.hpp user.cpp
-message.o: message.hpp user.hpp message.cpp
-	${CXX} -c message.hpp message.cpp
-room.o: room.hpp room.cpp user.hpp
-	${CXX} -c room.hpp room.cpp
-	
-#*************CONTROLLER goes here*****************************
-Controller.o: controller.hpp controller.cpp view.hpp chat_message.hpp
-	${CXX} -c controller.cpp controller.hpp
 
 #*************final exec goes here*****************************
 chat_client: chat_client.o login_window.o signup_win.o chat_view.o chat_window.o room_window.o top_bar.o join_window.o manage_window.o

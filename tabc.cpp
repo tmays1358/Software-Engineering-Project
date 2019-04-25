@@ -29,7 +29,7 @@ string tab_completion(string str)
     else
         cout << "Unable to open file";
     
-    for (i = 0; i < word.size(); i++)
+    for (int i = 0; i < word.size(); i++)
     {
     	if((word[i][0] == str[0]) && (word[i].size() > str.size())) // finds to fit first char
     																// and weeds out any sorted
