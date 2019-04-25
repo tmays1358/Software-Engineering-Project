@@ -4,6 +4,8 @@
 #include <string>
 #include <cstring>
 #include <sstream>
+#include <vector>
+#include <regex>
 using namespace std;
 int main(){
 string line = "";
@@ -12,17 +14,17 @@ int q = 0;
 ifstream myfile;
 myfile.open("sorted_words.txt");
 while(getline(myfile, line)){
-		//printf("%s\n", line.c_str());
 		strncpy(data[q], line.c_str(), 20);
-		//printf("%s\n", data[q]);
-		//qsort(data, q, 20, (int (*)(const void *, const void *))strcmp);
 		q++;
 }
 
 //sort(data[0], data[370099]);
-char data2[200][20];
-char data3[200][20];
-string word2 = "testings out the spell check spamlewq function don't try without regttte";
+//char data2[200][20];
+//char data3[200][20];
+vector<string> data2;
+vector<string> data3;
+vector<string> data4;
+string word2 = "testings out the spell check spamlewq function add.txt don't try without regttte transfer.txt";
 //string word2 = "what is passed through";
 
 
@@ -75,30 +77,68 @@ while(getline(ss, token, ' ')){
                 y = token.length();  //for comparison if word found if s's count = y its a match
                 string word = "";  //when a char match add to word, if it doesn't reset the matched word
                 for(k=0;k<20;k++){ //length of a word is 20
-                        if(data[i][k] == token[k]){ //compare one char at a time
+			if(token[k] == '.' && token[k+1] == 't' && token[k+2] == 'x' && token[k+3] == 't'){
+                                k = 21;
+                                i = o;
+                                data4.push_back(wp.c_str());
+                                }
+			 if(data[i][k] == token[k]){ //compare one char at a time
+/*				if(token[k] == '.' && token[k+1] == 't' && token[k+2] == 'x' && token[k+3] == 't'){
+				k = 21;
+				i = o;
+				word += token[k];
+				word += token[k+1];
+				word += token[k+2];
+				word += token[k+3];
+				data4.push_back(word.c_str());
+				}*/
                                 s++;
                                 word += token[k];
                         }
                         if((strcmp(wp.c_str(), word.c_str()))==0){
-                                strncpy(data2[sc], word.c_str(), 20);
-			//	printf("%s", data2[sc]);
+		        //if(s == y){
+
+                               // strncpy(data2[sc], word.c_str(), 20);
+			       data2.push_back(word.c_str());
+	//			printf("%s", data2[sc]);
 				sc++;
 				k = 21; //if a match set word to the 2nd array
 				i = o;
                         }
 			if(i == o-1 and k == 19){
-				strncpy(data3[kc], wp.c_str(), 20);
+				//strncpy(data3[kc], wp.c_str(), 20);
+				data3.push_back(wp.c_str());
 				kc++;
 				i = o+1;
 				k = 21;
 			}
-                        /*else{
-                                k = 21;
-                        }*/
                 }
         }
 
 }
+
+printf("Words Found\n");
+for(auto i=data2.begin(); i!=data2.end();i++){
+        cout << *i << " \n";
+}
+
+printf("\nWords Not Found\n");
+for(auto i=data3.begin(); i!=data3.end();i++){
+       // printf("%s ", *i.c_str());
+//	a = &i.length();
+       cout << *i << " \n";
+}
+
+printf("\nFILES Found\n");
+for(auto i=data4.begin(); i!=data4.end();i++){
+       // printf("%s ", *i.c_str());
+       cout << *i << " \n";
+}
+
+printf("\n");
+
+
+/*
 printf("Words Found\n");
 for(i=0; i<sc;i++){
 	printf("%s ", data2[i]);
@@ -110,29 +150,6 @@ for(i=0; i<kc;i++){
 }
 printf("\n");
 
-
-
-
-/*int sc = -1;
-while(delimit()){
-        for(i=l; i<o;i++){
-                int s=0;
-                int y = len(token);
-                string word = "";
-                for(k=0;k<20;k++){
-                        if(array[i][k] == token[k]){
-                                x++;
-                                word += token[k]
-                                sc++;
-                        }
-                        if(x==y){
-                                data2[sc] = word;
-                        }
-                        else{
-                                k = 21;
-                        }
-                }
-        }
-}
 */
+
 }
