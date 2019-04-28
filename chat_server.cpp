@@ -23,7 +23,7 @@ using asio::ip::tcp;
 //----------------------------------------------------------------------
 
 typedef std::deque<chat_message> chat_message_queue;
-std::string rf_names[11] = {"lobby.txt", "room1.txt", "room2.txt", "room2.txt", "room3.txt", "room4.txt", "room5.txt", "room6.txt", "room7.txt", "room8.txt", "room9.txt"};
+std::string rf_names[11] = {"lobby.SuperChat", "room1.SuperChat", "room2.SuperChat", "room2.SuperChat", "room3.SuperChat", "room4.SuperChat", "room5.SuperChat", "room6.SuperChat", "room7.SuperChat", "room8.SuperChat", "room9.SuperChat"};
 std::ofstream file;
 std::vector<std::vector<chat_message>> message_logs;
 int index_files = 0;
